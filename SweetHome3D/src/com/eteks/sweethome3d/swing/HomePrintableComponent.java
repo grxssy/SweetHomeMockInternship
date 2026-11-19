@@ -42,6 +42,7 @@ import java.util.HashSet;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -374,8 +375,22 @@ public class HomePrintableComponent extends JComponent implements Printable {
     if (pageExists == NO_SUCH_PAGE 
         && planView != null 
         && (homePrint == null || homePrint.isPlanPrinted())) {
+
+      int levelIndex = page - this.furniturePageCount;
+      List<Level> levels = this.home.getLevels();
+
+      if (levelIndex >= 0 && levelIndex < levels.size()){
+        Level originalLevel = home.getSelectedLevel();
+        Level printedLevel = levels.get(levelIndex);
+
+        home.setSelectedLevel(printedLevel);
+        pageExists = ((Printable) planView).print(g2D, pageFormat, 0);
+        home.setSelectedLevel(originalLevel);
+        } else {
+        pageExists = ((Printable)planView).print(g2D, pageFormat, page - this.furniturePageCount);
+      }
+
       // Try to print next plan view page
-      pageExists = ((Printable)planView).print(g2D, pageFormat, page - this.furniturePageCount);
       if (pageExists == PAGE_EXISTS
           && !this.printablePages.contains(page)) {
         this.printablePages.add(page);
@@ -415,8 +430,9 @@ public class HomePrintableComponent extends JComponent implements Printable {
         fixedFooterPageLabel.print(g2D);
         g2D.translate(-xFixedFooter, -yFixedFooter);
       }
-    }  
-    pageFormat.setPaper(oldPaper);    
+    }
+
+    pageFormat.setPaper(oldPaper);
     return pageExists;
   }
 
