@@ -42,8 +42,6 @@ import java.util.HashSet;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -344,15 +342,6 @@ public class HomePrintableComponent extends JComponent implements Printable {
       }
     }
 
-    // Get visible properties
-    List<HomePieceOfFurniture.SortableProperty> visibleProperties = new ArrayList<HomePieceOfFurniture.SortableProperty>(this.controller.getFurnitureController().getFurnitureVisibleProperties());
-
-    // Move level flag to back of the visibleProperties
-    int levelIndex = visibleProperties.indexOf(HomePieceOfFurniture.SortableProperty.LEVEL);
-    visibleProperties.remove(HomePieceOfFurniture.SortableProperty.LEVEL);
-    visibleProperties.add(HomePieceOfFurniture.SortableProperty.LEVEL);
-
-    this.controller.getFurnitureController().setFurnitureVisibleProperties(visibleProperties);
 
     View furnitureView = this.controller.getFurnitureController().getView();
     if (furnitureView != null 
@@ -379,17 +368,7 @@ public class HomePrintableComponent extends JComponent implements Printable {
       }
       // Try to print next furniture view page      
       pageExists = ((Printable)furnitureView).print(g2D, pageFormat, page);
-      if (furnitureTable != null) {
-        // Restore previous filter
-        ((FurnitureTable)furnitureView).setFurnitureFilter(furnitureFilter);
-      }
 
-      // Restore previous properties
-      visibleProperties.remove(HomePieceOfFurniture.SortableProperty.LEVEL);
-      if (levelIndex != -1) {
-        visibleProperties.add(levelIndex, HomePieceOfFurniture.SortableProperty.LEVEL);
-      }
-      this.controller.getFurnitureController().setFurnitureVisibleProperties(visibleProperties);
 
       if (pageExists == PAGE_EXISTS
           && !this.printablePages.contains(page)) {
