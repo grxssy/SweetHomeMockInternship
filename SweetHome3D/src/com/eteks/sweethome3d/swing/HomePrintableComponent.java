@@ -37,12 +37,7 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.security.AccessControlException;
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -366,6 +361,10 @@ public class HomePrintableComponent extends JComponent implements Printable {
       }
       // Try to print next furniture view page      
       pageExists = ((Printable)furnitureView).print(g2D, pageFormat, page);
+      if (furnitureTable != null) {
+        // Restore previous filter
+        ((FurnitureTable)furnitureView).setFurnitureFilter(furnitureFilter);
+      }
       if (pageExists == PAGE_EXISTS
           && !this.printablePages.contains(page)) {
         this.printablePages.add(page);
@@ -377,7 +376,13 @@ public class HomePrintableComponent extends JComponent implements Printable {
         && (homePrint == null || homePrint.isPlanPrinted())) {
 
       int levelIndex = page - this.furniturePageCount;
-      List<Level> levels = this.home.getLevels();
+      List<Level> levels = new ArrayList<Level>();
+
+      for (Level level: this.home.getLevels()){
+        if (level.isViewable()){
+          levels.add(level);
+        }
+      }
 
       if (levelIndex >= 0 && levelIndex < levels.size()){
         Level originalLevel = home.getSelectedLevel();
@@ -386,8 +391,8 @@ public class HomePrintableComponent extends JComponent implements Printable {
         home.setSelectedLevel(printedLevel);
         pageExists = ((Printable) planView).print(g2D, pageFormat, 0);
         home.setSelectedLevel(originalLevel);
-        } else {
-        pageExists = ((Printable)planView).print(g2D, pageFormat, page - this.furniturePageCount);
+        } else{
+        pageExists = ((Printable) planView).print(g2D, pageFormat, page - this.furniturePageCount);
       }
 
       // Try to print next plan view page
