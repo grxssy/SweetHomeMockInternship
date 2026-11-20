@@ -375,26 +375,6 @@ public class HomePrintableComponent extends JComponent implements Printable {
         && planView != null 
         && (homePrint == null || homePrint.isPlanPrinted())) {
 
-      int levelIndex = page - this.furniturePageCount;
-      List<Level> levels = new ArrayList<Level>();
-
-      for (Level level: this.home.getLevels()){
-        if (level.isViewable()){
-          levels.add(level);
-        }
-      }
-
-      if (levelIndex >= 0 && levelIndex < levels.size()){
-        Level originalLevel = home.getSelectedLevel();
-        Level printedLevel = levels.get(levelIndex);
-
-        home.setSelectedLevel(printedLevel);
-        pageExists = ((Printable) planView).print(g2D, pageFormat, 0);
-        home.setSelectedLevel(originalLevel);
-        } else{
-        pageExists = ((Printable) planView).print(g2D, pageFormat, page - this.furniturePageCount);
-      }
-
       // Try to print next plan view page
       if (pageExists == PAGE_EXISTS
           && !this.printablePages.contains(page)) {
