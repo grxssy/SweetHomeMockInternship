@@ -783,10 +783,16 @@ public class FurnitureTable extends JTable implements View, Printable {
       printableColumn.setHeaderRenderer(printableHeaderRenderer);
       printableColumnModel.addColumn(printableColumn);
     }
-    // Add level column
-    TableColumn printableColumn = ((FurnitureTableColumnModel) columnModel).availableColumns.get(HomePieceOfFurniture.SortableProperty.LEVEL);
+    TableColumn levelColumn =
+            ((FurnitureTableColumnModel) columnModel)
+                    .availableColumns.get(
+                            HomePieceOfFurniture.SortableProperty.LEVEL
+                    );
 
-    // Change printable column header renderer
+    TableColumn printableColumn = new TableColumn();
+    printableColumn.setIdentifier(levelColumn.getIdentifier());
+    printableColumn.setHeaderValue(levelColumn.getHeaderValue());
+    printableColumn.setCellRenderer(levelColumn.getCellRenderer());
     printableColumn.setHeaderRenderer(printableHeaderRenderer);
     printableColumnModel.addColumn(printableColumn);
 
