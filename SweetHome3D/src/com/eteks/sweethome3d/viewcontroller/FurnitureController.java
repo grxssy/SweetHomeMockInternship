@@ -504,6 +504,13 @@ public class FurnitureController implements Controller {
   }
 
   /**
+   * Get the furniture visible properties in home.
+   */
+  public List<HomePieceOfFurniture.SortableProperty> getFurnitureVisibleProperties() {
+    return this.home.getFurnitureVisibleProperties();
+  }
+
+  /**
    * Updates the furniture visible properties in home.  
    */
   public void setFurnitureVisibleProperties(List<HomePieceOfFurniture.SortableProperty> furnitureVisibleProperties) {
@@ -532,6 +539,7 @@ public class FurnitureController implements Controller {
               HomePieceOfFurniture.SortableProperty.WIDTH,
               HomePieceOfFurniture.SortableProperty.DEPTH,
               HomePieceOfFurniture.SortableProperty.HEIGHT,
+              HomePieceOfFurniture.SortableProperty.VOLUME,
               HomePieceOfFurniture.SortableProperty.X,
               HomePieceOfFurniture.SortableProperty.Y,
               HomePieceOfFurniture.SortableProperty.ELEVATION,

@@ -752,6 +752,10 @@ public class FurnitureTable extends JTable implements View, Printable {
       };
     for (int columnIndex = 0, n = columnModel.getColumnCount(); columnIndex < n; columnIndex++) {
       final TableColumn tableColumn = columnModel.getColumn(columnIndex);
+      // Do not add the level column in the loop
+      if (tableColumn.getIdentifier() == HomePieceOfFurniture.SortableProperty.LEVEL){
+        continue;
+      }
       // Create a printable column from existing table column
       TableColumn printableColumn = new TableColumn();
       printableColumn.setIdentifier(tableColumn.getIdentifier());
@@ -779,6 +783,19 @@ public class FurnitureTable extends JTable implements View, Printable {
       printableColumn.setHeaderRenderer(printableHeaderRenderer);
       printableColumnModel.addColumn(printableColumn);
     }
+    TableColumn levelColumn =
+            ((FurnitureTableColumnModel) columnModel)
+                    .availableColumns.get(
+                            HomePieceOfFurniture.SortableProperty.LEVEL
+                    );
+
+    TableColumn printableColumn = new TableColumn();
+    printableColumn.setIdentifier(levelColumn.getIdentifier());
+    printableColumn.setHeaderValue(levelColumn.getHeaderValue());
+    printableColumn.setCellRenderer(levelColumn.getCellRenderer());
+    printableColumn.setHeaderRenderer(printableHeaderRenderer);
+    printableColumnModel.addColumn(printableColumn);
+
     return print(g, pageFormat, pageIndex, printableColumnModel, Color.BLACK);
   }
 
