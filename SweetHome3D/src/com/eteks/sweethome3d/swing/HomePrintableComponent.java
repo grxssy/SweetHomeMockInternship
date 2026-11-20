@@ -374,7 +374,9 @@ public class HomePrintableComponent extends JComponent implements Printable {
     if (pageExists == NO_SUCH_PAGE 
         && planView != null 
         && (homePrint == null || homePrint.isPlanPrinted())) {
-
+      pageExists = ((Printable) planView).print(
+              g2D, pageFormat, page - this.furniturePageCount
+      );
       // Try to print next plan view page
       if (pageExists == PAGE_EXISTS
           && !this.printablePages.contains(page)) {
